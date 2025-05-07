@@ -1,0 +1,23 @@
+stages:
+  - test
+  - build
+
+test_flask:
+  stage: test
+  image: python:3.12
+  before_script:
+    - pip install -r requirements.txt
+  script:
+    - python -m py_compile app.py
+
+build_docker:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  variables:
+    DOCKER_DRIVER: overlay2
+  before_script:
+    - docker info
+  script:
+    - docker build -t just-project .
