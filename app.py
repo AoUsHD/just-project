@@ -1,30 +1,36 @@
 from flask import Flask, request, jsonify
-from whois_lookup import perform_whois
-from dns_lookup import perform_dns_lookup  # ✅ NEW
+from flask_cors import CORS
+import socket
+import whois
 
 app = Flask(__name__)
+CORS(app)
 
-@app.route("/")
-def home():
-    return jsonify({"message": "Welcome to just project WHOIS & DNS API"})
-
-@app.route("/whois", methods=["GET"])
-def whois_api():
-    domain = request.args.get("domain")
+@app.route("/api/whois")
+def whois_lookup():
+    domain = request.args.get("domain", "")
     if not domain:
-        return jsonify({"error": "Missing 'domain' parameter"}), 400
+        return jsonify({"error": "Missing domain"}), 400
+    try:
+        w = whois.whois(domain)
+        return jsonify(w)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
-    result = perform_whois(domain)
-    return jsonify(result)
-
-@app.route("/dns", methods=["GET"])
-def dns_api():
-    domain = request.args.get("domain")
+@app.route("/api/dns")
+def dns_lookup():
+    domain = request.args.get("domain", "")
     if not domain:
-        return jsonify({"error": "Missing 'domain' parameter"}), 400
-
-    result = perform_dns_lookup(domain)
-    return jsonify(result)
+        return jsonify({"error": "Missing domain"}), 400
+    try:
+        result = socket.gethostbyname_ex(domain)
+        return jsonify({
+            "hostname": result[0],
+            "aliases": result[1],
+            "ip_addresses": result[2]
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True)
