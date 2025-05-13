@@ -1,1 +1,10 @@
-node_modules
+# Python
+venv/
+__pycache__/
+
+# Node
+node_modules/
+build/
+
+# OS
+.DS_Store
