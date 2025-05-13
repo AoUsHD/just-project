@@ -6,7 +6,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest  # الأفضل نستخدم Ubuntu
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
@@ -31,7 +31,7 @@ jobs:
         node-version: 18
 
     - name: Install frontend dependencies
-      run: npm ci
+      run: npm install
 
     - name: Build React app
       run: npm run build
