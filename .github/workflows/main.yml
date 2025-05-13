@@ -6,14 +6,35 @@ on:
 
 jobs:
   test:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest  # الأفضل نستخدم Ubuntu
+
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
+
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: 3.12
-    - name: Install dependencies
+
+    - name: Install Python dependencies
       run: pip install -r requirements.txt
-    - name: Check syntax
+
+    - name: Start Flask app (background)
+      run: |
+        nohup python app.py &
+        sleep 5
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+
+    - name: Install frontend dependencies
+      run: npm ci
+
+    - name: Build React app
+      run: npm run build
+
+    - name: Run syntax check
       run: python -m py_compile app.py
