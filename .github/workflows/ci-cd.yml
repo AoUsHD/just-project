@@ -1,23 +1,35 @@
-name: Build Docker Images
+name: Build and Push Docker Images
 
 on:
   push:
     branches:
-      - main
+      - master
   pull_request:
     branches:
-      - main
+      - master
 
 jobs:
-  build:
+  build-and-push:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
       - name: Build backend image
-        run: docker build -t justproject-backend ./backend
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/justproject-backend:latest ./backend
 
       - name: Build frontend image
-        run: docker build -t justproject-frontend ./frontend
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/justproject-frontend:latest ./frontend
+
+      - name: Push backend image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/justproject-backend:latest
+
+      - name: Push frontend image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/justproject-frontend:latest
