@@ -9,7 +9,7 @@ export function DnsLookup() {
     setError("");
     setResult("");
     try {
-      const res = await fetch(`/api/dns?domain=${domain}`);
+      const res = await fetch(`http://localhost:5000/api/dns?domain=${domain}`);
       const data = await res.json();
       if (data.error) {
         setError(data.error);
@@ -41,6 +41,9 @@ export function DnsLookup() {
           className="flex-grow border rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           value={domain}
           onChange={(e) => setDomain(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") handleLookup();
+          }} // ✅ دعم Enter
         />
         <button
           onClick={handleLookup}
