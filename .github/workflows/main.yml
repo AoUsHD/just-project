@@ -1,6 +1,6 @@
 name: Just Project CI
 
-on:
+on: none
   push:
     branches: [ master ]
 
