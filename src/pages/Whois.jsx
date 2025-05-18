@@ -9,7 +9,7 @@ export function Whois() {
     setError("");
     setResult("");
     try {
-      const res = await fetch(`http://localhost:5000/api/whois?domain=${domain}`);
+      const res = await fetch(`https://just-project-1.onrender.com/api/whois?domain=${domain}`);
       const data = await res.json();
       if (data.error) {
         setError(data.error);
