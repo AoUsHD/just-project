@@ -1,10 +1,40 @@
 # Python
 venv/
+.venv/
+env/
+ENV/
 __pycache__/
+*.pyc
+.cache/
+
+# Environment Variables (VERY IMPORTANT)
+.env
+.env.*
+
+# Logs
+*.log
+logs/
+
+# Keys / Certificates
+*.pem
+*.key
+*.crt
+*.cert
+
+# Docker secret configs
+docker-compose.override.yml
+docker-compose.prod.yml
 
 # Node
 node_modules/
 build/
+dist/
+
+# Editors
+.vscode/
+.idea/
+*.swp
 
 # OS
 .DS_Store
+Thumbs.db
